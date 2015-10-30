@@ -1,0 +1,7 @@
+# test file for network-interfaces
+---
+- hosts: all
+  remote_user: vagrant
+  sudo: true
+  roles:
+    - ../../
