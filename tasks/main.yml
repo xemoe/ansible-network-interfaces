@@ -1,3 +1,4 @@
+# tasks file for network-interfaces
 ---
 - name: create directory
   file:
@@ -7,7 +8,7 @@
 
 - name: all interfaces
   template:
-    src: all_interfaces.j2
+    src: etc/network/interfaces.j2
     dest: "{{ network_all_interfaces_path }}"
   notify: restart
   when: network_interfaces
@@ -20,7 +21,7 @@
 
 - name: configurations
   template:
-    src: device.j2
+    src: etc/network/interfaces.d/device.j2
     dest: "{{ network_interface_path }}/device-{{ item.device }}-{{ item.family | default('inet') }}"
   with_items: network_interfaces
   register: network_configuration_result
