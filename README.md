@@ -25,7 +25,8 @@ Example Playbook
   sudo_user: root
 
   roles:
-  - role: dresden-weekly.network-interfaces
+  - dresden-weekly.network-interfaces
+  vars:
     network_manage_devices: yes
     network_interfaces:
     - device: eth0
@@ -33,8 +34,8 @@ Example Playbook
       family: inet
       method: static
       address: 192.168.1.11
-      network: 192.168.1.0
-      netmask: 193.168.1.255
+      netmask: 192.168.1.0
+      network: 193.168.1.255
       gateway: 192.168.1.1
       nameservers:
       - 8.8.8.8
