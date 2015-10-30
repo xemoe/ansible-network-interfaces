@@ -1,3 +1,4 @@
+# defaults file for network-interfaces
 ---
 # Flag whether all network devices are controlled by this role
 #
