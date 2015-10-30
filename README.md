@@ -34,8 +34,8 @@ Example Playbook
       family: inet
       method: static
       address: 192.168.1.11
-      netmask: 192.168.1.0
-      network: 193.168.1.255
+      netmask: 255.255.255.0
+      network: 193.168.1.0
       gateway: 192.168.1.1
       nameservers:
       - 8.8.8.8
