@@ -5,6 +5,10 @@
     path: "{{ network_interfaces_interface_path }}"
     state: directory
   when: network_interfaces_interfaces
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-create-directory
 
 - name: all interfaces
   template:
@@ -12,12 +16,20 @@
     dest: "{{ network_interfaces_all_interfaces_path }}"
   notify: restart
   when: network_interfaces_interfaces
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-all-interfaces
 
 - name: list network interfaces
   command: "find {{ network_interfaces_interface_path }} -type f"
   changed_when: no
   when: network_interfaces_interfaces
   register: network_interfaces_existing_files
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-list-network-interfaces
 
 - name: configurations
   template:
@@ -25,6 +37,10 @@
     dest: "{{ network_interfaces_interface_path }}/device-{{ item.device }}-{{ item.family | default('inet') }}"
   with_items: network_interfaces_interfaces
   register: network_interfaces_configuration_result
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-configurations
 
 - name: configured files
   set_fact:
@@ -33,6 +49,10 @@
         u"{{ item.dest | default(item.path) }}"
         {{ '' if loop.last else ',' }}
       {%- endfor %}]
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-configured-files
 
 - name: remove configurations
   file:
@@ -42,6 +62,10 @@
     network_interfaces_manage_devices
     and (item not in network_interfaces_configured_files)
   with_items: network_interfaces_existing_files.stdout_lines | default([])
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-remove-configurations
 
 - name: restart devices
   service:
@@ -54,3 +78,7 @@
       or (true in item.1 | selectattr('item.auto') | list)
     )
   with_items: network_interfaces_configuration_result.results | default([]) | groupby('item.device')
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-restart-devices
