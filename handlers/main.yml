@@ -2,5 +2,5 @@
 ---
 - name: restart
   service:
-    name: "{{ network_service }}"
+    name: "{{ network_interfaces_service }}"
     state: restarted

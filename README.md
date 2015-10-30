@@ -27,8 +27,8 @@ Example Playbook
   roles:
   - dresden-weekly.network-interfaces
   vars:
-    network_manage_devices: yes
-    network_interfaces:
+    network_interfaces_manage_devices: yes
+    network_interfaces_interfaces:
     - device: eth0
       auto: true
       family: inet
