@@ -4,7 +4,7 @@
   file:
     path: "{{ network_interfaces_interface_path }}"
     state: directory
-  when: network_interfaces_interfaces
+  when: network_interfaces_interfaces | length > 0
   tags:
     - configuration
     - network-interfaces
@@ -15,7 +15,7 @@
     src: etc/network/interfaces.j2
     dest: "{{ network_interfaces_all_interfaces_path }}"
   notify: restart
-  when: network_interfaces_interfaces
+  when: network_interfaces_interfaces | length > 0
   tags:
     - configuration
     - network-interfaces
@@ -24,7 +24,7 @@
 - name: list network interfaces
   command: "find {{ network_interfaces_interface_path }} -type f"
   changed_when: no
-  when: network_interfaces_interfaces
+  when: network_interfaces_interfaces | length > 0
   register: network_interfaces_existing_files
   tags:
     - configuration
