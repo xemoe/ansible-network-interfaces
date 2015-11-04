@@ -1,50 +1,75 @@
+# tasks file for network-interfaces
 ---
 - name: create directory
   file:
-    path: "{{ network_interface_path }}"
+    path: "{{ network_interfaces_interface_path }}"
     state: directory
-  when: network_interfaces
+  when: network_interfaces_interfaces | length > 0
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-create-directory
 
 - name: all interfaces
   template:
-    src: all_interfaces.j2
-    dest: "{{ network_all_interfaces_path }}"
-  notify: restart
-  when: network_interfaces
+    src: etc/network/interfaces.j2
+    dest: "{{ network_interfaces_all_interfaces_path }}"
+  notify: restart network-interfaces
+  when: network_interfaces_interfaces | length > 0
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-all-interfaces
 
 - name: list network interfaces
-  command: "find {{ network_interface_path }} -type f"
-  changed_when: no
-  when: network_interfaces
-  register: network_existing_files
+  command: "find {{ network_interfaces_interface_path }} -type f"
+  changed_when: false
+  when: network_interfaces_interfaces | length > 0
+  register: network_interfaces_existing_files
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-list-network-interfaces
 
 - name: configurations
   template:
-    src: device.j2
-    dest: "{{ network_interface_path }}/device-{{ item.device }}-{{ item.family | default('inet') }}"
-  with_items: network_interfaces
-  register: network_configuration_result
+    src: etc/network/interfaces.d/device.j2
+    dest: "{{ network_interfaces_interface_path }}/device-{{ item.device }}-{{ item.family | default('inet') }}"
+  with_items: network_interfaces_interfaces
+  register: network_interfaces_configuration_result
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-configurations
 
 - name: configured files
   set_fact:
-    network_configured_files: >
-      [{% for item in network_configuration_result.results | default([]) -%}
+    network_interfaces_configured_files: >
+      [{% for item in network_interfaces_configuration_result.results | default([]) -%}
         u"{{ item.dest | default(item.path) }}"
         {{ '' if loop.last else ',' }}
       {%- endfor %}]
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-configured-files
 
 - name: remove configurations
   file:
-    dest: "{{ item }}"
+    path: "{{ item }}"
     state: absent
   when: >
-    network_manage_devices
-    and (item not in network_configured_files)
-  with_items: network_existing_files.stdout_lines | default([])
+    network_interfaces_manage_devices
+    and (item not in network_interfaces_configured_files)
+  with_items: network_interfaces_existing_files.stdout_lines | default([])
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-remove-configurations
 
 - name: restart devices
   service:
-    name: "{{ network_service }}"
+    name: "{{ network_interfaces_service }}"
     state: restarted
     arguments: "INTERFACE={{ item.0 }}"
   when: >
@@ -52,4 +77,8 @@
     and ((0 != item.1 | selectattr('item.auto', 'undefined') | list | length)
       or (true in item.1 | selectattr('item.auto') | list)
     )
-  with_items: network_configuration_result.results | default([]) | groupby('item.device')
+  with_items: network_interfaces_configuration_result.results | default([]) | groupby('item.device')
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-restart-devices

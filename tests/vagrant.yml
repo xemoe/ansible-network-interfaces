@@ -1,0 +1,22 @@
+# test file for network-interfaces
+---
+- hosts: all
+  remote_user: vagrant
+  sudo: true
+  roles:
+    - ../../
+  vars:
+    network_interfaces_manage_devices: true
+    network_interfaces_interfaces:
+      - device: eth0
+        auto: true
+        family: inet
+        method: dhcp
+        pre-up:
+          - 'sleep 2'
+      - device: eth1
+        auto: true
+        family: inet
+        method: static
+        address: "{{ ansible_eth1.ipv4.address }}"
+        netmask: "{{ ansible_eth1.ipv4.netmask }}"
