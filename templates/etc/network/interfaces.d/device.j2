@@ -12,8 +12,8 @@ iface {{ item.device }} {{ item.family | default('inet', true) }} {{ item.method
 {%- if item.nameservers is defined %}
   dns-nameservers {{ item.nameservers | join(' ') }}
 {% endif %}
-{%- if item.dns-search is defined %}
-  dns-search {{ item.dns-search }}
+{%- if item.dns_search is defined %}
+  dns-search {{ item.dns_search }}
 {% endif %}
 
 {%- if item.bridge is defined -%}

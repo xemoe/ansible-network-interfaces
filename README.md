@@ -25,7 +25,7 @@ None
 * `network_interfaces_interfaces.{n}.broadcast`: [optional]: Broadcast address
 * `network_interfaces_interfaces.{n}.gateway`: [optional]: Default gateway
 * `network_interfaces_interfaces.{n}.nameservers`: [optional]: List of nameservers for this interface
-* `network_interfaces_interfaces.{n}.dns-search`: [optional]: Search list for host-name lookup
+* `network_interfaces_interfaces.{n}.dns_search`: [optional]: Search list for host-name lookup
 
 * `network_interfaces_interfaces.{n}.subnets`: [optional]: List of additional subnets, eg. ['192.168.123.0/24', '192.168.124.11/32']
 
