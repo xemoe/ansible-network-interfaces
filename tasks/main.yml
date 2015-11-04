@@ -14,7 +14,7 @@
   template:
     src: etc/network/interfaces.j2
     dest: "{{ network_interfaces_all_interfaces_path }}"
-  notify: restart
+  notify: restart network-interfaces
   when: network_interfaces_interfaces | length > 0
   tags:
     - configuration

@@ -50,7 +50,9 @@ None
 
 None
 
-#### Example
+#### Example(s)
+
+##### DigitalOcean droplet with private networking enabled
 
 ```yaml
 ---
@@ -58,26 +60,26 @@ None
   roles:
     - network-interfaces
   vars:
-    network_interfaces_manage_devices: yes
+    network_interfaces_manage_devices: true
     network_interfaces_interfaces:
-    - device: eth0
-      auto: true
-      family: inet
-      method: static
-      address: 188.166.9.28
-      netmask: 255.255.0.0
-      gateway: 188.166.0.1
-      nameservers:
-      - 8.8.8.8
-      - 8.8.4.4
-      up:
-      - 'ip addr add 10.18.0.8/16 dev eth0'
-    - device: eth1
-      auto: true
-      family: inet
-      method: static
-      address: 10.133.136.172
-      netmask: 255.255.0.0
+      - device: eth0
+        auto: true
+        family: inet
+        method: static
+        address: 188.166.9.28
+        netmask: 255.255.0.0
+        gateway: 188.166.0.1
+        nameservers:
+          - 8.8.8.8
+          - 8.8.4.4
+        up:
+          - 'ip addr add 10.18.0.8/16 dev eth0'
+      - device: eth1
+        auto: true
+        family: inet
+        method: static
+        address: 10.133.136.172
+        netmask: 255.255.0.0
 ```
 
 #### License
@@ -86,9 +88,9 @@ MIT
 
 #### Author Information
 
-Andreas Reischuck
-Mischa ter Smitten
-Mark van Driel
+* Andreas Reischuck
+* Mark van Driel
+* Mischa ter Smitten
 
 #### Feedback, bug-reports, requests, ...
 
