@@ -1,13 +1,14 @@
+# defaults file for network-interfaces
 ---
 # Flag whether all network devices are controlled by this role
 #
 # If true, all additional scripts are deleted
-network_manage_devices: yes
+network_interfaces_manage_devices: yes
 
 # List of all network interface configurations
 #
 # For ipv6 you want to add an additional inet6 entry
-network_interfaces:
+network_interfaces_interfaces:
 - device: eth0
   auto: true # enable on boot (default)
   family: inet # network type eg. inet | inet6 (default)

@@ -1,90 +1,94 @@
-Ansible network interface configuration
-=======================================
-[![Ansible Galaxy](https://img.shields.io/badge/Ansible%20Galaxy-dresden--weekly.network--interfaces-blue.svg)](https://galaxy.ansible.com/list#/roles/2766)
+## network-interfaces
 
-This is an Ansible role that manages network interface configuration as it is found on Debian/Ubuntu servers
+[![Build Status](https://travis-ci.org/Oefenweb/ansible-network-interfaces.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-network-interfaces) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-network-interfaces-blue.svg)](https://galaxy.ansible.com/list#/roles/5783)
 
-Requirements
-------------
+Manage network interfaces in Debian-like systems.
 
-Ubuntu 12.04 (Precise) or Ubuntu 14.04 (Trusty)
+#### Requirements
 
-May work with other versions, but has never been tested.
+None
 
-Dependencies
-------------
+#### Variables
 
-none
+##### General
 
-Example Playbook
-----------------
+* `network_interfaces_manage_devices`: [required]: Whether all additional scripts should be deleted
+* `network_interfaces_interfaces`: [default: `[]`]: Network interfaces declarations
+* `network_interfaces_interfaces.{n}.device`: [required]: Device name
+* `network_interfaces_interfaces.{n}.auto`: [default: `true`]: Enable on boot
+* `network_interfaces_interfaces.{n}.family`: [default: `inet`]: Network type, eg. inet | inet6
+* `network_interfaces_interfaces.{n}.method`: [default: `dhcp`]: Method of the interface, eg. dhcp | static
 
-```yml
+* `network_interfaces_interfaces.{n}.address`: [optional]: Address
+* `network_interfaces_interfaces.{n}.network`: [optional]: Network address
+* `network_interfaces_interfaces.{n}.netmask`: [optional]: Netmask
+* `network_interfaces_interfaces.{n}.broadcast`: [optional]: Broadcast address
+* `network_interfaces_interfaces.{n}.gateway`: [optional]: Default gateway
+* `network_interfaces_interfaces.{n}.nameservers`: [optional]: List of nameservers for this interface
+
+* `network_interfaces_interfaces.{n}.subnets`: [optional]: List of additional subnets, eg. ['192.168.123.0/24', '192.168.124.11/32']
+
+##### Bridge
+
+* `network_interfaces_interfaces.{n}.bridge`: [optional, default: `{}`]: Bridge declarations
+* `network_interfaces_interfaces.{n}.bridge.ports`: [optional]: Bridge ports
+* `network_interfaces_interfaces.{n}.bridge.stp`: [optional]: Turn spanning tree protocol on/off
+* `network_interfaces_interfaces.{n}.bridge.fd`: [optional]: Bridge forward delay
+* `network_interfaces_interfaces.{n}.bridge.maxwait`: [optional]: Maximum time to wait for the bridge ports to get to the forwarding status
+* `network_interfaces_interfaces.{n}.bridge.waitport`: [optional]: Maximum time to wait for the specified ports to become available 
+
+##### Inline hook scripts
+
+* `network_interfaces_interfaces.{n}.pre-up`: [optional, default: `[]`]: List of pre-up script lines
+* `network_interfaces_interfaces.{n}.up`: [optional, default: `[]`]: List of up script lines
+* `network_interfaces_interfaces.{n}.down`: [optional, default: `[]`]: List of down script lines
+* `network_interfaces_interfaces.{n}.post-down`: [optional, default: `[]`]: List of post-down script lines
+
+
+## Dependencies
+
+None
+
+#### Example
+
+```yaml
+---
 - hosts: all
-  sudo: true
-  sudo_user: root
-
   roles:
-  - role: dresden-weekly.network-interfaces
-    network_manage_devices: yes
-    network_interfaces:
+    - network-interfaces
+  vars:
+    network_interfaces_manage_devices: yes
+    network_interfaces_interfaces:
     - device: eth0
       auto: true
       family: inet
       method: static
-      address: 192.168.1.11
-      network: 192.168.1.0
-      netmask: 193.168.1.255
-      gateway: 192.168.1.1
+      address: 188.166.9.28
+      netmask: 255.255.0.0
+      gateway: 188.166.0.1
       nameservers:
       - 8.8.8.8
       - 8.8.4.4
-      subnets:
-      - 192.168.1.12/32
+      up:
+      - 'ip addr add 10.18.0.8/16 dev eth0'
     - device: eth1
       auto: true
       family: inet
-      method: dhcp
+      method: static
+      address: 10.133.136.172
+      netmask: 255.255.0.0
 ```
 
-Changelog
----------
+#### License
 
-**0.2** *TODO*
+MIT
 
-* [ ] open for your ideas, fixes and pull requests
+#### Author Information
 
-**0.1** (first release) 01.02.2015
+Andreas Reischuck
+Mischa ter Smitten
+Mark van Driel
 
-* [✓] ipv6 & ipv4 support
-* [✓] support for multiple network devices
-* [✓] dhcp and static configuration
-* [✓] support for bridges
-* [✓] additional subnets and ips
-* [✓] custom hook scripts
-* [✓] remove old interfaces
+#### Feedback, bug-reports, requests, ...
 
-License
--------
-
-The MIT License (MIT)
-
-Copyright (c) 2015 dresden-weekly
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Are [welcome](https://github.com/Oefenweb/ansible-network-interfaces/issues)!
