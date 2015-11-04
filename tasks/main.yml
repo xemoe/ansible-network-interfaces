@@ -23,7 +23,7 @@
 
 - name: list network interfaces
   command: "find {{ network_interfaces_interface_path }} -type f"
-  changed_when: no
+  changed_when: false
   when: network_interfaces_interfaces | length > 0
   register: network_interfaces_existing_files
   tags:
@@ -56,7 +56,7 @@
 
 - name: remove configurations
   file:
-    dest: "{{ item }}"
+    path: "{{ item }}"
     state: absent
   when: >
     network_interfaces_manage_devices
