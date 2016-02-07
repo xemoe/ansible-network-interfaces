@@ -26,6 +26,7 @@ None
 * `network_interfaces_interfaces.{n}.gateway`: [optional]: Default gateway
 * `network_interfaces_interfaces.{n}.nameservers`: [optional]: List of nameservers for this interface
 * `network_interfaces_interfaces.{n}.dns_search`: [optional]: Search list for host-name lookup
+* `network_interfaces_interfaces.{n}.mtu`: [optional]: MTU of the interface
 
 * `network_interfaces_interfaces.{n}.subnets`: [optional]: List of additional subnets, eg. ['192.168.123.0/24', '192.168.124.11/32']
 
@@ -69,6 +70,7 @@ None
         address: 188.166.9.28
         netmask: 255.255.0.0
         gateway: 188.166.0.1
+        mtu: 1500
         nameservers:
           - 8.8.8.8
           - 8.8.4.4
