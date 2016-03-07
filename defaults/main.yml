@@ -25,6 +25,7 @@ network_restart_method: service
 network_interfaces_interfaces:
   - device: eth0
     auto: true # enable on boot (default)
+    allow_hotplug: false
     family: inet # network type eg. inet | inet6 (default)
     method: dhcp # dhcp | static (default)
     # examples for method 'static'

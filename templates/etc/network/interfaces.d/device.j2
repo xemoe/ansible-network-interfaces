@@ -3,6 +3,9 @@
 {% if item.auto | default(true) %}
 auto {{ item.device }}
 {% endif %}
+{% if item.allow_hotplug | default(false) %}
+allow-hotplug {{ item.device }}
+{% endif %}
 iface {{ item.device }} {{ item.family | default('inet', true) }} {{ item.method | default('dhcp', true) }}
 {% for key in ['address', 'broadcast', 'description', 'gateway', 'netmask', 'network', 'vlan-raw-device', 'bond-mode', 'bond-miimon', 'bond-slaves', 'bond-master', 'bond-lacp-rate'] %}
 {%   if key in item %}
