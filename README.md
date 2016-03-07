@@ -63,6 +63,7 @@ None
   vars:
     network_interfaces_manage_devices: true
     network_interfaces_interfaces:
+
       - device: eth0
         description: just a description for humans to understand
         auto: true
@@ -77,12 +78,24 @@ None
           - 8.8.4.4
         up:
           - 'ip addr add 10.18.0.8/16 dev eth0'
+
       - device: eth1
+        description: simple dhcp client interface
         auto: true
         family: inet
         method: static
         address: 10.133.136.172
         netmask: 255.255.0.0
+
+      - device: vlan123
+        description: sample vlan interface using eth0 and tagged for VLAN 123.
+        method: static
+        address: 1.2.3.4
+        netmask: 24
+        broadcast: 1.2.3.255
+        vlan-raw-device: eth0
+        up:
+          - 'route add default gw 1.2.3.254'
 ```
 
 #### License
