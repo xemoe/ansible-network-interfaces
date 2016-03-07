@@ -39,7 +39,7 @@
 - name: configurations
   template:
     src: etc/network/interfaces.d/device.j2
-    dest: "{{ network_interfaces_interface_path }}/device-{{ item.device }}-{{ item.family | default('inet') }}"
+    dest: "{{ network_interfaces_interface_path }}/device-{{ item.device }}-{{ item.family | default('inet') }}.cfg"
   with_items: network_interfaces_interfaces
   register: network_interfaces_configuration_result
   notify:
