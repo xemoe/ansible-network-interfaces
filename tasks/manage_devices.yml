@@ -1,0 +1,32 @@
+
+- name: list existing files
+  command: "find {{ network_interfaces_interface_path }} -type f"
+  changed_when: no
+  when: network_interfaces_interfaces
+  register: network_existing_files
+
+# depending on change the result stores dest or path
+- name: configured files
+  set_fact:
+    network_interfaces_configured_files: >
+      [{% for item in network_interfaces_configuration_result.results | default([]) -%}
+        u"{{ item.dest | default(item.path) }}"
+        {{ '' if loop.last else ',' }}
+      {%- endfor %}]
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-configured-files
+
+- name: remove configurations
+  file:
+    path: "{{ item }}"
+    state: absent
+  when: item not in network_interfaces_configured_files
+  with_items: network_interfaces_existing_files.stdout_lines | default([])
+  tags:
+    - configuration
+    - network-interfaces
+    - network-interfaces-remove-configurations
+
+
